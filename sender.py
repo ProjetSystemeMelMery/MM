@@ -1,32 +1,32 @@
 #!/usr/bin/env python3 
 
-from filelist import *
-import options
+#!/usr/bin/env python3 
+
+import options, sys
 import message
-import sys
+import filelist
 
-args = options.aruguments()
+args = options.arguments()
 
-if len(args.SD) > 1 :
-    destinataire = args.SD[-1]
-    source = args.SD[:-1]
-else : 
-    source = args.SD
-    args.listonly = True
+src = args.SRC
+dst = args.DST
 
-print(source,destinataire)
+print(src,dst)
 
-def client(fin,fout):
-    if args.listonly:
-        for e in listeF(source):
-            print(e)
-        sys.exit(0)
+def sender(fin,fout):
+    if args.recursive:
+        liste = filelist.listeFichiersRec(src)
     else:
-        message.send(fout,"destinataire",destinataire)
-        (tag,v) = message.receive(fin)
-        if tag == "réponse dest" and v==0 :
-            message.send(fout,"fichiers",listeF(source))
-        sys.exit(0)
+        liste = filelist.listeFichiersSansRec(src)
+    print(liste)
+    if args.listonly:
+        for e in liste:
+            print(e)
+    message.send(fout,"début envoi fichiers",0)
+    for e in liste:
+        message.send(fout,"fichier",e)
+    message.send(fout,"fin envoi fichiers",0)
+    sys.exit(0)
 
 
     

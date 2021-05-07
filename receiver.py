@@ -1,26 +1,22 @@
 #!/usr/bin/env python3 
 
-import message
-import filelist
-import os, sys
-import generator
 import options
+import message
 
-args = options.aruguments()
+args = options.arguments()
 
-def serveur(fin,fout):
-    if args.listonly:
-        sys.exit(0)
-    condition = True
-    while condition:
+def receiver(fin,fout):
+    
+    stop = False
+    fichiers = []
+    (tag,v) = message.receive(fin)
+    print(tag,v)
+    if tag=='début envoi fichiers':
+        stop = True
+    while stop:
         (tag,v) = message.receive(fin)
-        if tag == "destinataire":
-            dest = v
-            os.chdir(dest)
-            listedest = filelist.listeFichiersSourceSansOp(dest)
-            message.send(fout,"réponse dest",0)
-        if tag == "fichiers":
-            listesource = v
-        condition = False
-    sys.exit(0)
-
+        if tag=="fichier":
+            fichiers += v
+        if tag=="fin envoi fichiers":
+            stop = False
+    print(fichiers, file=sys.stderr)

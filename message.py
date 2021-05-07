@@ -5,9 +5,9 @@
 
 import pickle, os
 import options
-from filelist import *
+import filelist
 
-args = options.aruguments()
+args = options.arguments()
  
 def send(fd,tag,v):
     a_envoyer = (tag,v)
@@ -15,8 +15,8 @@ def send(fd,tag,v):
     size = len(buff)
     os.write(fd,size.to_bytes(3,'little'))
     nboctets = os.write(fd,buff)
-    while size > 0 :
-        size = size - nboctets
+    while 0 < nboctets < size :
+        buff = buff[nboctets:]
         nboctets = os.write(fd,buff)
 
 def receive(fd):

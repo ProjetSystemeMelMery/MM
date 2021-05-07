@@ -33,11 +33,3 @@ def listeFichiersRec(src):
             new = os.path.join(src,e)
             liste.append(listeFichiersRec(new))
     return liste
-
-def listeF(src):
-    if args.recursive:
-        if isinstance(src, list):
-            src = os.getcwd()
-        return listeFichiersRec(src)
-    else:
-        return listeFichiersSourceSansOp(src)

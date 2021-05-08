@@ -20,6 +20,7 @@ parser.add_argument("--blockingio",help="utilise des E / S bloquantes pour le sh
 parser.add_argument("--listonly",help="lister les fichiers au lieu de les copiert",action="store_true")
 args=parser.parse_args()
 
+#fonction qui permettra de récuper les arguments dans les autres modules
 def arguments():
     return args
 

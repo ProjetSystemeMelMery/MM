@@ -6,8 +6,8 @@
 import argparse, os
 
 parser = argparse.ArgumentParser()
-#Une liste dont le dernier élement est la destination
-parser.add_argument("SD",nargs='+', default=os.getcwd())
+#Liste comprenant la/les sources et la destination
+parser.add_argument("SD", nargs="+",help="nécessite au moins une source")
 #Option -v --verbose
 parser.add_argument("-v","--verbose",help="augmente la verbosité",action="store_true")
 #Option -q --quiet
@@ -15,12 +15,12 @@ parser.add_argument("-q","--quiet",help="supprime les messages sans erreur",acti
 #Option -r --recursive
 parser.add_argument("-r","--recursive",help="récursion dans les répertoires",action="store_true")
 #Option --blocking-io
-parser.add_argument("--blocking-io",help="utilise des E / S bloquantes pour le shell distant",action="store_true")
+parser.add_argument("--blockingio",help="utilise des E / S bloquantes pour le shell distant",action="store_true")
 #Option --list-only
 parser.add_argument("--listonly",help="lister les fichiers au lieu de les copiert",action="store_true")
 args=parser.parse_args()
 
-def aruguments():
+def arguments():
     return args
 
     

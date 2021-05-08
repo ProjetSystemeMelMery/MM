@@ -32,7 +32,19 @@ def client(fin,fout):
         for e in liste :
             message.send(fout,"fichier",e)
         message.send(fout,"fin envoie fichiers",'')
-        (tag,v)=message.receive(fd)
+        (tag,v)=message.receive(fin)
+        while tag != "fin requête":
+            if tag == "écraser ou créer fichier":
+                f = os.open(v[1],os.O_RDONLY)
+                message.send(fout,"debut/créer/écraser","")
+                text = os.read(f,1000)
+                while len(text) > 0:
+                    message.send(fout,"",text)
+                    text = os.read(f,1000)
+                message.send(fout,'fin',"")
+            if tag == "créer répertoire":
+                message.send(fout,tag,v[1])
+        message(fout,tag,'')
 
 
     

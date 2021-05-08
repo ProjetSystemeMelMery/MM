@@ -5,6 +5,7 @@
 import os
 import options
 
+#On récupère les arguments de la ligne de commande dans args
 args = options.arguments()
 
 #La liste de fichiers Source contient soit : 
@@ -13,43 +14,42 @@ args = options.arguments()
 # - un nom de répertoire avec ou sans /
 # - un chemain absolu
 # - un chemin relatif (.) 
-# Pour la suite, il faut être certain de bien connaître le chemin absolu de chaque fichier :
 
-def misajour(src):
-    newsrc = []
-    for e in src:
-        if e == '.':
-            newe = os.getcwd()
-        else :
-            newe = os.path.join(os.getcwd(),e)
-        newsrc.append(newe)
-    return newsrc
-
-
-def listeFichiersSansRec(src):
+#Définition d'une liste de fichiers associé à leurs chemins d'un répertoire de façon non récurise, en prenant en compte le /
+def listeFichiersSansRec(src,string): #intervention de string uniquement pour faciliter les comparaisons dans le générateur
     liste = []
     for e in src:
+        #Si / présent, on visite aussi les fichiers que contient le répertoire
         if e[-1]=='/':
-            liste = liste + [(os.path.join(os.getcwd(),e[:-1]),os.path.basename(e[:-1]))]
+            liste = liste + [(e[:-1],os.path.basename(e[:-1]))]
             if os.path.isdir(e):
                 for elt in os.listdir(e):
                     liste = liste + [(os.path.join(e,elt),elt)]
+        #Sinon, on ne transfère que le répertoire seul
         else:
-            liste = liste + [(e,os.path.basename(e))]
-    return liste
+            liste = liste + [(string+e,os.path.basename(e))]
+    return liste 
+    #retoure une liste de type [(chemin, noms du fichier), ...]
 
+#Définition d'une liste de manière récursive, on visite les sous-répertoires...
 listerec = []
 def listeFichiersRec(src):
     global listerec
     for e in src:
         if e[-1]=='/':
             e = e[:-1]
+        #Si c'est un fichier, on le rajoute à la liste
         if os.path.isfile(e):
             listerec = listerec + [(e,os.path.basename(e))]
+        #Si c'est un répertoire, on visite son contenu de manière récursive en rappelant la fonction
         if os.path.isdir(e):
             listerec = listerec + [(e,os.path.basename(e))]
             l = []
-            for elt in os.listdir(e):
-                l.append(os.path.join(e,elt))
-            listerec.append(listeFichiersRec(l))
+            if os.listdir(e)!=[]:
+                for elt in os.listdir(e):
+                    l.append(os.path.join(e,elt))
+                listerec.append(listeFichiersRec(l))
     return listerec
+    #retoure une liste de type [(chemin, noms du fichier), ...]
+
+    #On pense à préciser les chemins respectifs de chaque fichier pour ne faire aucune erreur sur la localité de chaque fichier (transfert, copie, création...)

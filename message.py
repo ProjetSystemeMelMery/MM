@@ -23,20 +23,8 @@ def receive(fd):
     size = int.from_bytes(os.read(fd,3),'little')
     buff = os.read(fd,size)
     msg = buff
-    while len(msg) > 0 :
+    while len(msg)<size :
         buff = os.read(fd,size)
         msg = msg + buff
     (tag,v) = pickle.loads(msg)
     return (tag,v)
-
-def taillefichiers(liste):
-    somme = 0
-    for e in liste:
-        var=os.stat(e)
-        taille = var.st_size
-        somme += taille
-    return somme
-
-def verbosité():
-    if args.verbose :
-        print("Sent ", taillefichiers(listeF(source)), " bytes") 

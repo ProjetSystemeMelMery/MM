@@ -1,22 +1,22 @@
 #!/usr/bin/env python3 
 
-import options
-import message
+import options, filelist
+import message, os, sys
+from sender import *
+
 
 args = options.arguments()
 
-def receiver(fin,fout):
-    
-    stop = False
-    fichiers = []
-    (tag,v) = message.receive(fin)
-    print(tag,v)
-    if tag=='début envoi fichiers':
-        stop = True
-    while stop:
-        (tag,v) = message.receive(fin)
-        if tag=="fichier":
-            fichiers += v
-        if tag=="fin envoi fichiers":
-            stop = False
-    print(fichiers, file=sys.stderr)
+def receiver():
+    os.chdir(dst)
+    fichiersdansdest = filelist.listeFichiersRec(filelist.misajour(os.listdir(os.getcwd())))
+    print(fichiersdansdest,file=sys.stderr )
+    fichierssource = []
+    (tag,v) = message.receive(0)
+    while tag == "fichier":
+        fichierssource = fichierssource + [v]
+        (tag,v) = message.receive(0)
+
+    pid = os.fork()
+    if pid == 0 :
+        generator.generateur(fichierssource,fichiersdansdest)

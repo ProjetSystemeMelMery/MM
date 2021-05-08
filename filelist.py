@@ -31,12 +31,11 @@ def listeFichiersSansRec(src):
     for e in src:
         if e[-1]=='/':
             liste = liste + [(os.path.join(os.getcwd(),e[:-1]),os.path.basename(e[:-1]))]
-        else:
-            liste = liste + [(e,os.path.basename(e))]
-        if e[-1] == '/':
             if os.path.isdir(e):
                 for elt in os.listdir(e):
                     liste = liste + [(os.path.join(e,elt),elt)]
+        else:
+            liste = liste + [(e,os.path.basename(e))]
     return liste
 
 listerec = []

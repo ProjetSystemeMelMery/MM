@@ -37,3 +37,9 @@ def index(liste,e):
     for i in range(len(liste)):
         if liste[i]== e:
             return i
+
+def fichiers_tries(src ='.'):
+    i = [s for s in os.listdir(src)
+        if os.path.isfile(os.path.join(src, s))]
+    i.sort(key=lambda s: os.path.getsize(os.path.join(src, s)))
+    return i

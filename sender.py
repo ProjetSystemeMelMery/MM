@@ -19,6 +19,10 @@ else:
     src = args.SD
     dst = []
 
+#On gère le cas où on utilise . pour désigner le répertoire courant
+if src == ['.']:
+    src = [os.getcwd()]
+
 #Message pour résumer source et destinataire si verbose activé.
 if args.verbose:
     print("La source est",src,". La destination est",dst,".")
@@ -28,17 +32,32 @@ if dst == []:
     args.listonly = True
 
 #Test pour vérifier si la/les source(s) existe(nt) ou non dans le répertoire courant.
-contenu = filelist.listeFichiersRec([os.getcwd()])
+contenu = filelist.listeFichiersSansRec([os.getcwd()+"/"],"")
 cont = []
 for e in contenu:
     cont.append(e[1])
-source = filelist.listeFichiersSansRec(src,"")
-for e in source:
-    if e[1] not in cont :
+if src[0][-1]=='/':
+    source = src[0][:-1]
+elif src == [os.getcwd()]:
+    source = cont
+else:
+    sourceliste = filelist.listeFichiersSansRec(src,"")
+    source = []
+    for e in sourceliste:
+        source.append(e[1])
+if len(source)>1:
+    for e in source:
+        if e in source :
+            break
+        if e not in cont :
+            print("Source ", src, " non reconnue")
+            sys.exit(0)
+else :
+    if source[0] not in cont :
         print("Source ", src, " non reconnue")
         sys.exit(0)
 
-#Créer le répertoire destination s'il n'existe pas déjà.
+#Créer le répertoire destination s'il n'existe pas déjà. 
 try :
     os.mkdir(dst)
 except :
@@ -78,6 +97,11 @@ def client(fin,fout):
                 #Demande de création/remplacement de fichier
                 if tag == "creer fichier":
                     #On ouvre le fichier en question, on le lie et on envoie son contenu au serveur (devenu client)
+                    #Avant ça, on pense à se placer dans le bon répertoire pour ouvrir le fichier (en fonction du slash)
+                    if src[0][-1]=='/':
+                        os.chdir(position_courante+'/'+src[0])
+                    else:
+                        os.chdir(position_courante) 
                     f = os.open(v[0],os.O_RDONLY)
                     message.send(fout,"debut creer",v)
                     text = os.read(f,1000)

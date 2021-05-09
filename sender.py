@@ -32,30 +32,26 @@ if dst == []:
     args.listonly = True
 
 #Test pour vérifier si la/les source(s) existe(nt) ou non dans le répertoire courant.
-contenu = filelist.listeFichiersSansRec([os.getcwd()+"/"],"")
-cont = []
-for e in contenu:
-    cont.append(e[1])
-if src[0][-1]=='/':
-    source = src[0][:-1]
-elif src == [os.getcwd()]:
-    source = cont
-else:
+if len(src)>1:
+    contenu = filelist.listeFichiersSansRec([os.getcwd()+"/"],"")
+    cont = []
+    for e in contenu:
+        cont.append(e[1])
     sourceliste = filelist.listeFichiersSansRec(src,"")
     source = []
     for e in sourceliste:
         source.append(e[1])
-if len(source)>1:
     for e in source:
-        if e in source :
-            break
         if e not in cont :
             print("Source ", src, " non reconnue")
             sys.exit(0)
-else :
-    if source[0] not in cont :
+else:
+    try:
+        os.chdir(src[0])
+    except:
         print("Source ", src, " non reconnue")
         sys.exit(0)
+    os.chdir(position_courante)
 
 #Créer le répertoire destination s'il n'existe pas déjà. 
 try :
@@ -118,10 +114,8 @@ def client(fin,fout):
                     message.send(fout,"creer repertoire",v)
                     #On attend une nouvelle demande
                     (tag,v)=message.receive(fin)
-                
-                #demande de supprimer un fichier
                 if tag == "supprimer fichier":
-                    message.send(fout, "supprimer fichier", v)
+                    message.send(fout,"supprimer fichier",v)
                     (tag,v)=message.receive(fin)
             #On précise au serveur qu'on a terminé !
             message.send(fout,"fin transfert",'')

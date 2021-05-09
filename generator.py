@@ -37,6 +37,7 @@ def generateur(fichierssrc,fichiersdst): #les deux arguments sont respectivement
             if e[1] not in nomssrc:
                 message.send(1,"supprimer fichier", e)
 
+
     #On parcourt les fichiers de la source
     for e in fichierssrc: 
         #Si le nom de fichier est aussi présent dans la liste destinataire
@@ -46,8 +47,11 @@ def generateur(fichierssrc,fichiersdst): #les deux arguments sont respectivement
             #Si c'est un fichier ordinaire, on envoie une requête de création/remplacement ici de fichier au client, en liant le tuple du fichier
             if os.path.isfile(e[0]):
                 message.send(1,"creer fichier",e)
+            if os.path.isfile(e[0]) and os.path.isdir(cheminsdest[i]):
+                if args.force:
+                        message.send(1,"supprimer repertoire",e)
             #Si c'est un répertoire, mais qu'il n'a pas la même place dans l'arborescence côté destinataire (il ets dans un sous répertoire), on crée le répertoire à sa place.
-            if os.path.isdir(e[0]) and (e[0]!=nomsdest[i]):
+            if os.path.isdir(e[0]) and (e[0]!=cheminsdest[i]):
                 message.send(1,'creer repertoire',e)
             #Si ce sont deux répertoites identiques, on ne fait rien.
         #Si le fichier ou répertoire n'existe pas chez le destinataire, alors on le crée !

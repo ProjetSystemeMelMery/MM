@@ -35,32 +35,33 @@ def receiver():
         while tag != "fin transfert":
             #Demande de création/remplacement de fichier
             if tag == "debut creer":
-                #On indique à mrsync d'ignorer la création de fichiers et répertoire qui n'existent pas encore sur la destination.
+                if args.existing and args.ignoreexisting:
+                    pass
+                else:
+                    #On ouvre le fichier en écriture, s'il n'existe pas déjà, on le crée, puis on écrit ce que le client nous envoie à l'intérieur tant qu'il ne nous tag pas que c'est la fin des données.  
+                    f = os.open(v[0],os.O_WRONLY|os.O_CREAT)
+                    (tag,v) = message.receive(0)
+                    while tag == "donnees":
+                        os.write(f,v)
+                        (tag,v) = message.receive(0)
+            #Demande de création de répertoire
+            if tag == "creer repertoire":
                 if args.existing:
                     pass
                 else:
-                    if args.force:
-                        for e in fichiersdansdest:
-                            if os.listdir(e) == []:
-                                os.rmdir(v[0])
-                #On ouvre le fichier en écriture, s'il n'existe pas déjà, on le crée, puis on écrit ce que le client nous envoie à l'intérieur tant qu'il ne nous tag pas que c'est la fin des données.
-                f = os.open(v[0],os.O_WRONLY|os.O_CREAT)
-                (tag,v) = message.receive(0)
-                while tag == "donnees":
-                    os.write(f,v)
-                    (tag,v) = message.receive(0)
-            #Demande de création de répertoire
-            if tag == "creer repertoire":
-                #S'il y a une erreur, c'est que le répertoire existe déjà, normalement ça ne drevait pas se produire, mais au cas où ^^'
-                try:
-                    os.mkdir(v[0])
-                except:
-                    os.mkdir(v[1])
+                    try:
+                        os.mkdir(v[0])
+                    except:
+                        os.mkdir(v[1])
              #demande de supprimer un fichier
             if tag == "supprimer fichier":
                 try:
                     os.unlink(v[0])
                 except:
                     os.unlink(v[1])
+            if tag == "supprimer repertoire":
+                #Boucle récursive dans le fichier pour supprimer les fichiers et répertoire un à un
+                #puis suppressio du répertoire une fois vide
+                pass
             #Puis on attend une nouvelle requête de la part du client.
             (tag,v) = message.receive(0)

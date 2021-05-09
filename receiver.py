@@ -10,6 +10,7 @@ args = options.arguments()
 def receiver():
     #On se place dans le répertoire destinataire
     os.chdir(dst)
+    print(os.getcwd(),file=sys.stderr)
     #Petit aménagement pour faciliter les comparaison des chemins dans le générateur.
     if dst[-1]!="/":
         prefixe = dst+"/"

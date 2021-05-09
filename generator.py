@@ -7,15 +7,20 @@ args = options.arguments()
 
 def generateur(fichierssrc,fichiersdst): #les deux arguments sont respectivement la liste de fichiers à la source, et celle se trouvant à la destination
     #On se place dans la répertoire courant initial de lancement de commande, pour pouvoir contrôler la nature des fichiers.
-    os.chdir(position_courante) 
+    print(fichierssrc, file=sys.stderr)
+    print(fichiersdst, file=sys.stderr)
 
+    #On se place dans le bon répertoire courant pour tester le type des fichiers (en fonction de /)
+    if src[0][-1]=='/':
+        os.chdir(position_courante+'/'+src[0])
+    else:
+        os.chdir(position_courante)
     #Nous n'avons pas trié les listes, car la manière dont nous contruisons nos listes de fichiers était déjà assez pratique.
 
     #liste des noms de fichiers dans le répertoire destinataire 
     nomsdest = []
     for e in fichiersdst:
         nomsdest.append(e[1])
-    print(nomsdest,file=sys.stderr)
     #liste des chemins de fichiers dans le répertoire destinateire
     cheminsdest = []
     for e in fichiersdst:

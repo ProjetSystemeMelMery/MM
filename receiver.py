@@ -54,5 +54,5 @@ def receiver():
             
             #demande de supprimer un fichier
             if tag == "supprimer fichier":
-                os.unlink()
+                os.unlink(v[0])
                 (tag,v) = message.receive(0)

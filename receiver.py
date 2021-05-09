@@ -51,3 +51,8 @@ def receiver():
                     pass
             #Puis on attend une nouvelle requête de la part du client.
             (tag,v) = message.receive(0)
+            
+            #demande de supprimer un fichier
+            if tag == "supprimer fichier":
+                os.unlink()
+                (tag,v) = message.receive(0)

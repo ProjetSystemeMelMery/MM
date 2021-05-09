@@ -22,6 +22,10 @@ parser.add_argument("--listonly",help="lister les fichiers au lieu de les copier
 parser.add_argument("--server",help="pour la connexion distante",action="store_true")
 #Option --delete
 parser.add_argument("--delete",help="supprime les fichiers superflus des répertoires de destination",action="store_true")
+#Option --existing
+parser.add_argument("--existing", help="skip creating new files on receiver", action="store_true")
+#Option --force
+parser.add_argument("--force", help="force la suppression des répertoires même s'ils ne sont pas vides ", action="store_true")
 args=parser.parse_args()
 
 #fonction qui permettra de récuper les arguments dans les autres modules

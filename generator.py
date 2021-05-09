@@ -28,6 +28,14 @@ def generateur(fichierssrc,fichiersdst): #les deux arguments sont respectivement
 
     #Commencement de l'envoi des requêtes
     message.send(1,"debut requete",'')
+
+    #si l'option delete est activée alors on compare les fichiers sources et destinataires, et on efface les fichiers qui sont présents dans destinataire mais pas dans source
+    if args.delete:
+        for e in fichiersdst:
+                if e[1] not in fichierssrc:
+                    if os.path.isfile(e[0]):
+                        message.send(1,"supprimer fichier", e)
+
     #On parcourt les fichiers de la source
     for e in fichierssrc: 
         #Si le nom de fichier est aussi présent dans la liste destinataire
@@ -50,13 +58,6 @@ def generateur(fichierssrc,fichiersdst): #les deux arguments sont respectivement
                 message.send(1,"creer fichier",e)
             if os.path.isdir(e[0]):
                 message.send(1,'creer repertoire',e)
-        
-        #si l'option delete est activée alors on compare les fichiers sources et destinataires, et on efface les fichiers présents dans destinataires mais pas dans source
-        if args.delete:
-            for e in fichierssrc:
-                for i in nomsdest:
-                    if i[1] not in fichierssrc:
-                        message.send(1, "supprimer fichier", i)
     #Quand on a passé en revue toute la liste source, on envoie un message de fin de requête au client.
     message.send(1,"fin requete",'')
     #fin

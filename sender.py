@@ -118,6 +118,11 @@ def client(fin,fout):
                     message.send(fout,"creer repertoire",v)
                     #On attend une nouvelle demande
                     (tag,v)=message.receive(fin)
+                
+                #demande de supprimer un fichier
+                if tag == "supprimer fichier":
+                    message.send(fout, "supprimer fichier", v)
+                    (tag,v)=message.receive(fin)
             #On précise au serveur qu'on a terminé !
             message.send(fout,"fin transfert",'')
 

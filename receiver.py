@@ -35,6 +35,14 @@ def receiver():
         while tag != "fin transfert":
             #Demande de création/remplacement de fichier
             if tag == "debut creer":
+                #On indique à mrsync d'ignorer la création de fichiers et répertoire qui n'existent pas encore sur la destination.
+                if args.existing:
+                    pass
+                else:
+                    if args.force:
+                        for e in fichiersdansdest:
+                            if os.listdir(e) == []:
+                                os.rmdir(v[0])
                 #On ouvre le fichier en écriture, s'il n'existe pas déjà, on le crée, puis on écrit ce que le client nous envoie à l'intérieur tant qu'il ne nous tag pas que c'est la fin des données.
                 f = os.open(v[0],os.O_WRONLY|os.O_CREAT)
                 (tag,v) = message.receive(0)

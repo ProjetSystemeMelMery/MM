@@ -119,5 +119,4 @@ def client(fin,fout):
                     (tag,v)=message.receive(fin)
             #On précise au serveur qu'on a terminé !
             message.send(fout,"fin transfert",'')
-
     

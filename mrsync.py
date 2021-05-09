@@ -35,7 +35,7 @@ def transfert_local():
     #fin du programme
     sys.exit(0)
 
-#Nous avons bloqué lors du transfert vers l'utilisateur distant... Cette fonction est une idée/tentative.
+#Nous sommes restées bloquées lors du transfert vers l'utilisateur distant... Cette fonction est une idée/tentative.
 def transfert_distant(dst):
     #création des tubes
     fd1,fw1 = os.pipe()
@@ -66,14 +66,18 @@ def transfert_distant(dst):
 def distant(dst):
     iarobase = sender.dst.index("@")
     ipoints = sender.dst.index(":")
+    #On récupère le non de l'autre utilisateur et du host.
     distant = sender.dst[:iarobase]
     localhost = sender.dst[(iarobase+1):ipoints]
+    #On construit la liste d'arguments.
     arg = ["ssh", "-e", "none", "-l", distant, localhost, "--", "./mrsync.py", "--server"]+sys.argv[1:] 
     os.execvp("ssh", arg)
     sys.exit(0)
 
 if __name__ =="__main__":
+    #Si le destinataire est distant (contient : dans son nom) alors on exécute le transfert distant.
     if ":" in sender.dst:
         transfert_distant(sender.dst)
+    #Sinon on fait un transfert local normal.
     else:
         transfert_local()

@@ -21,7 +21,6 @@ def listeFichiersSansRec(src,string): #intervention de string uniquement pour fa
     for e in src:
         #Si / présent, on visite aussi les fichiers que contient le répertoire
         if e[-1]=='/':
-            liste = liste + [(e[:-1],os.path.basename(e[:-1]))]
             if os.path.isdir(e):
                 for elt in os.listdir(e):
                     liste = liste + [(os.path.join(e,elt),elt)]
@@ -35,21 +34,26 @@ def listeFichiersSansRec(src,string): #intervention de string uniquement pour fa
 listerec = []
 def listeFichiersRec(src):
     global listerec
+    #Si il y a un slash alors on prend comme source les fichiers du répertoire sans le répertoire parent
+    if src[0][-1]=='/':
+        deb = src[0]
+        src = os.listdir(src[0])
+    else:
+        deb = ""
+    #deb nous permet de conserver le nom du répertoire parent pour effectuer les tests sur la nature des fichiers.
     for e in src:
-        if e[-1]=='/':
-            e = e[:-1]
         #Si c'est un fichier, on le rajoute à la liste
-        if os.path.isfile(e):
+        if os.path.isfile(deb+e):
             listerec = listerec + [(e,os.path.basename(e))]
         #Si c'est un répertoire, on visite son contenu de manière récursive en rappelant la fonction
-        if os.path.isdir(e):
+        if os.path.isdir(deb+e):
             listerec = listerec + [(e,os.path.basename(e))]
             l = []
-            if os.listdir(e)!=[]:
-                for elt in os.listdir(e):
+            if os.listdir(deb+e)!=[]:
+                for elt in os.listdir(deb+e):
                     l.append(os.path.join(e,elt))
                 listerec.append(listeFichiersRec(l))
     return listerec
     #retoure une liste de type [(chemin, noms du fichier), ...]
 
-    #On pense à préciser les chemins respectifs de chaque fichier pour ne faire aucune erreur sur la localité de chaque fichier (transfert, copie, création...)
+#On pense à préciser les chemins respectifs de chaque fichier pour ne faire aucune erreur sur la localité de chaque fichier (transfert, copie, création...)

@@ -23,7 +23,7 @@ def listeFichiersSansRec(src,string): #intervention de string uniquement pour fa
         if e[-1]=='/':
             if os.path.isdir(e):
                 for elt in os.listdir(e):
-                    liste = liste + [(os.path.join(e,elt),elt)]
+                    liste = liste + [(elt,elt)]
         #Sinon, on ne transfère que le répertoire seul
         else:
             liste = liste + [(string+e,os.path.basename(e))]

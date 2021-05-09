@@ -117,6 +117,9 @@ def client(fin,fout):
                 if tag == "supprimer fichier":
                     message.send(fout,"supprimer fichier",v)
                     (tag,v)=message.receive(fin)
+                if tag == "supprimer repertoire":
+                    message.send(fout,"supprimer repertoire",v)
+                    (tag,v)=message.receive(fin)
             #On précise au serveur qu'on a terminé !
             message.send(fout,"fin transfert",'')
     

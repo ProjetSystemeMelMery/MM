@@ -16,7 +16,7 @@ def receiver():
     else:
         prefixe = dst
     #On génère la liste de fichiers contenues dans le rep destinataire.
-    fichiersdansdest = filelist.listeFichiersSansRec(os.listdir(os.getcwd()),prefixe)
+    fichiersdansdest = filelist.listeFichiersSansRec(os.listdir(os.getcwd()),"")
     #Récupération des fichiers sources dans une liste
     fichierssource = []
     (tag,v) = message.receive(0)

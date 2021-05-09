@@ -10,7 +10,6 @@ args = options.arguments()
 def receiver():
     #On se place dans le répertoire destinataire
     os.chdir(dst)
-    print(os.getcwd(),file=sys.stderr)
     #Petit aménagement pour faciliter les comparaison des chemins dans le générateur.
     if dst[-1]!="/":
         prefixe = dst+"/"
@@ -45,14 +44,15 @@ def receiver():
             #Demande de création de répertoire
             if tag == "creer repertoire":
                 #S'il y a une erreur, c'est que le répertoire existe déjà, normalement ça ne drevait pas se produire, mais au cas où ^^'
-                try : 
+                try:
                     os.mkdir(v[0])
                 except:
-                    pass
+                    os.mkdir(v[1])
+             #demande de supprimer un fichier
+            if tag == "supprimer fichier":
+                try:
+                    os.unlink(v[0])
+                except:
+                    os.unlink(v[1])
             #Puis on attend une nouvelle requête de la part du client.
             (tag,v) = message.receive(0)
-            
-            #demande de supprimer un fichier
-            if tag == "supprimer fichier":
-                os.unlink(v[0])
-                (tag,v) = message.receive(0)

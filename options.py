@@ -23,7 +23,9 @@ parser.add_argument("--server",help="pour la connexion distante",action="store_t
 #Option --delete
 parser.add_argument("--delete",help="supprime les fichiers superflus des répertoires de destination",action="store_true")
 #Option --existing
-parser.add_argument("--existing", help="skip creating new files on receiver", action="store_true")
+parser.add_argument("--existing",help="ignorer la création de nouveaux fichiers et répertoires sur le récepteur ",action="store_true")
+#Option --ignoreexisting
+parser.add_argument("--ignoreexisting",help="ignorer la mis-à-jour de nouveaux fichiers sur le récepteur ",action="store_true")
 #Option --force
 parser.add_argument("--force", help="force la suppression des répertoires même s'ils ne sont pas vides ", action="store_true")
 args=parser.parse_args()

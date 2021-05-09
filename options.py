@@ -20,6 +20,8 @@ parser.add_argument("--blockingio",help="utilise des E / S bloquantes pour le sh
 parser.add_argument("--listonly",help="lister les fichiers au lieu de les copiert",action="store_true")
 #Option --server
 parser.add_argument("--server",help="pour la connexion distante",action="store_true")
+#Option --delete
+parser.add_argument("--delete",help="supprime les fichiers superflus des répertoires de destination",action="store_true")
 args=parser.parse_args()
 
 #fonction qui permettra de récuper les arguments dans les autres modules
